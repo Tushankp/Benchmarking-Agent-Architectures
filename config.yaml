@@ -1,0 +1,22 @@
+llm:
+  provider: "ollama"
+  model: "llama3.2:latest"
+
+
+benchmark:
+  tasks_per_category: 10
+  runs_per_task: 5
+  timeout_seconds: 600
+  results_dir: "./reports"
+  logs_dir: "./logs"
+
+sandbox:
+  docker_image: "python:3.11-slim"
+  network_isolated: true
+  memory_limit: "512m"
+  cpu_limit: 0.5
+
+security_tools:
+  nmap_path: "/usr/bin/nmap"
+  searchsploit_path: "/usr/bin/searchsploit"
+  exploitdb_path: "/usr/share/exploitdb"

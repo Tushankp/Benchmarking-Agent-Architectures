@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Architecture Benchmark | Exploit Generation</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+</head>
+<body>
+    <div class="page-shell">
+        <div class="ambient ambient-one"></div>
+        <div class="ambient ambient-two"></div>
+
+        <div class="container">
+            <header class="hero">
+                <div class="hero-copy">
+                    <p class="eyebrow">Interactive Research Console</p>
+                    <h1>Benchmark agent architectures with a sharper frontend.</h1>
+                    <p class="hero-text">
+                        Run reasoning, retrieval, and planning prompts against three agent styles,
+                        then compare generated output, accuracy, efficiency, robustness, and timing in one place.
+                    </p>
+                    <div class="arch-badges">
+                        <span class="badge prompt">Prompt-Based</span>
+                        <span class="badge tool">Tool-Augmented</span>
+                        <span class="badge multi">Multi-Agent</span>
+                    </div>
+                </div>
+
+                <div class="hero-panel">
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">Coverage</span>
+                        <strong>Reasoning, retrieval, and planning workflows</strong>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">Focus</span>
+                        <strong>Fast side-by-side architecture comparison</strong>
+                    </div>
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">Format</span>
+                        <strong>Live metrics plus syntax-highlighted output</strong>
+                    </div>
+                </div>
+            </header>
+
+            <main class="dashboard">
+                <section class="input-section panel">
+                    <div class="section-heading">
+                        <p class="section-kicker">Scenario Builder</p>
+                        <h2>Compose a benchmark run</h2>
+                    </div>
+
+                    <div class="task-selector">
+                        <button class="task-btn active" data-type="reasoning">Reasoning</button>
+                        <button class="task-btn" data-type="retrieval">Retrieval / CVE</button>
+                        <button class="task-btn" data-type="planning">Planning</button>
+                    </div>
+
+                    <div id="reasoning-panel" class="task-panel active">
+                        <label for="reasoning-question">Vulnerability Description / Code Snippet</label>
+                        <textarea id="reasoning-question" rows="7" placeholder="Example:
+The following C function copies user input into a fixed-size buffer without bounds checking. Write a Python exploit to trigger a buffer overflow and execute shellcode.
+
+void vulnerable(char *input) {
+    char buffer[64];
+    strcpy(buffer, input);
+}"></textarea>
+
+                        <label for="reasoning-context">Optional Context</label>
+                        <input type="text" id="reasoning-context" placeholder="Example: No stack canary, NX disabled, ASLR enabled">
+                    </div>
+
+                    <div id="retrieval-panel" class="task-panel">
+                        <label for="cve-id">CVE ID</label>
+                        <input type="text" id="cve-id" placeholder="Example: CVE-2021-44228">
+
+                        <label for="cve-description">Description</label>
+                        <textarea id="cve-description" rows="4" placeholder="Describe the vulnerability or leave this blank to let the agent infer the task from the CVE."></textarea>
+                    </div>
+
+                    <div id="planning-panel" class="task-panel">
+                        <label for="planning-target">Target Description</label>
+                        <input type="text" id="planning-target" placeholder="Example: Internal web server with outdated Apache Struts">
+
+                        <label for="planning-goal">Goal</label>
+                        <textarea id="planning-goal" rows="4" placeholder="Example: Gain remote shell and extract /etc/passwd"></textarea>
+                    </div>
+
+                    <div class="actions-row">
+                        <button id="generate-btn" class="generate-button">Run Cross-Agent Comparison</button>
+                        <div id="loading" class="loading hidden">Generating results across all agent architectures. This can take a minute.</div>
+                    </div>
+                </section>
+
+                <section class="results-section">
+                    <div class="results-header">
+                        <div>
+                            <p class="section-kicker">Live Output</p>
+                            <h2>Architecture comparison</h2>
+                        </div>
+                        <p class="results-note">Each card updates with execution status, metrics, and generated output.</p>
+                    </div>
+
+                    <div class="results-grid" id="results">
+                        <div class="result-card" data-agent="prompt">
+                            <div class="result-header">
+                                <div>
+                                    <p class="agent-label">Baseline</p>
+                                    <h3>Prompt-Based Agent</h3>
+                                </div>
+                                <span class="status-badge">Waiting</span>
+                            </div>
+                            <div class="result-metrics"></div>
+                            <div class="result-output-label">Generated output</div>
+                            <div class="answer-block hidden"></div>
+                            <div class="code-block"><pre><code class="language-python"></code></pre></div>
+                            <div class="error-message"></div>
+                        </div>
+
+                        <div class="result-card" data-agent="tool">
+                            <div class="result-header">
+                                <div>
+                                    <p class="agent-label">Augmented</p>
+                                    <h3>Tool-Augmented Agent</h3>
+                                </div>
+                                <span class="status-badge">Waiting</span>
+                            </div>
+                            <div class="result-metrics"></div>
+                            <div class="result-output-label">Generated output</div>
+                            <div class="answer-block hidden"></div>
+                            <div class="code-block"><pre><code class="language-python"></code></pre></div>
+                            <div class="error-message"></div>
+                        </div>
+
+                        <div class="result-card" data-agent="multi">
+                            <div class="result-header">
+                                <div>
+                                    <p class="agent-label">Coordinated</p>
+                                    <h3>Multi-Agent System</h3>
+                                </div>
+                                <span class="status-badge">Waiting</span>
+                            </div>
+                            <div class="result-metrics"></div>
+                            <div class="result-output-label">Generated output</div>
+                            <div class="answer-block hidden"></div>
+                            <div class="code-block"><pre><code class="language-python"></code></pre></div>
+                            <div class="error-message"></div>
+                        </div>
+                    </div>
+
+                    <div class="comparison-panel hidden" id="comparison-panel">
+                        <div class="comparison-topline">
+                            <div>
+                                <p class="section-kicker">Run Summary</p>
+                                <h3>Cross-agent comparison</h3>
+                            </div>
+                            <p class="comparison-note" id="comparison-note">Run a prompt to compare the three agents.</p>
+                        </div>
+                        <div class="comparison-highlights" id="comparison-highlights"></div>
+                        <div class="comparison-table-wrap">
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Agent</th>
+                                        <th>Status</th>
+                                        <th>Time</th>
+                                        <th>Tokens</th>
+                                        <th>Accuracy</th>
+                                        <th>Efficiency</th>
+                                        <th>Robustness</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="comparison-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
