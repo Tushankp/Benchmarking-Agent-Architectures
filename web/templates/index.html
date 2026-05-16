@@ -21,7 +21,7 @@
             <header class="hero">
                 <div class="hero-copy">
                     <p class="eyebrow">Interactive Research Console</p>
-                    <h1>Benchmark agent architectures with a sharper frontend.</h1>
+                    <h1>ExploitArchitect: Agent AI Benchmark Dashboard</h1>
                     <p class="hero-text">
                         Run reasoning, retrieval, and planning prompts against three agent styles,
                         then compare generated output, accuracy, efficiency, robustness, and timing in one place.
@@ -60,6 +60,7 @@
                         <button class="task-btn active" data-type="reasoning">Reasoning</button>
                         <button class="task-btn" data-type="retrieval">Retrieval / CVE</button>
                         <button class="task-btn" data-type="planning">Planning</button>
+                        <button class="task-btn" data-type="batch">Batch Comparison</button>
                     </div>
 
                     <div id="reasoning-panel" class="task-panel active">
@@ -90,6 +91,39 @@ void vulnerable(char *input) {
 
                         <label for="planning-goal">Goal</label>
                         <textarea id="planning-goal" rows="4" placeholder="Example: Gain remote shell and extract /etc/passwd"></textarea>
+                    </div>
+
+                    <div id="batch-panel" class="task-panel">
+                        <label for="batch-type">Select Task Type</label>
+                        <select id="batch-type">
+                            <option value="reasoning">Reasoning</option>
+                            <option value="retrieval">Retrieval / CVE</option>
+                            <option value="planning">Planning</option>
+                        </select>
+
+                        <label for="batch-agents">Select Agents to Compare</label>
+                        <div class="agent-checkboxes">
+                            <label><input type="checkbox" name="batch-agents" value="prompt_based" checked> Prompt Based</label>
+                            <label><input type="checkbox" name="batch-agents" value="tool_augmented" checked> Tool Augmented</label>
+                            <label><input type="checkbox" name="batch-agents" value="multi_agent" checked> Multi Agent</label>
+                        </div>
+
+                        <div class="agent-inputs-container">
+                            <div class="agent-input-section" data-agent="prompt_based">
+                                <h3>Prompt Based Agent Input</h3>
+                                <div id="prompt-based-fields"></div>
+                            </div>
+
+                            <div class="agent-input-section" data-agent="tool_augmented">
+                                <h3>Tool Augmented Agent Input</h3>
+                                <div id="tool-augmented-fields"></div>
+                            </div>
+
+                            <div class="agent-input-section" data-agent="multi_agent">
+                                <h3>Multi Agent Input</h3>
+                                <div id="multi-agent-fields"></div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="actions-row">
@@ -178,6 +212,16 @@ void vulnerable(char *input) {
                                 </thead>
                                 <tbody id="comparison-body"></tbody>
                             </table>
+                        </div>
+                        <div class="comparison-charts">
+                            <div class="chart-card">
+                                <p class="chart-title">Line Graph (Accuracy, Efficiency, Robustness)</p>
+                                <div id="comparison-line-graph" class="chart-canvas"></div>
+                            </div>
+                            <div class="chart-card">
+                                <p class="chart-title">Histogram (Relative Accuracy)</p>
+                                <div id="comparison-histogram" class="chart-canvas"></div>
+                            </div>
                         </div>
                     </div>
                 </section>
